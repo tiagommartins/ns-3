@@ -30,5 +30,7 @@ Setar a variável global **$NS3_HOME**
 Setar a variável global **$NS3_HOME**
 ### Como "Rodar"
 ```
-./deploy.sh nome-do-projeto  
+./run.sh first
 ```
+
+Onde "first" é o nome do projeto compilado.
