@@ -24,7 +24,7 @@ cd unilasalle
 mkdir workspace
 ```
 
-Acessar a pasta padrão para iniciar a instalção do ns-3:
+Acessar a pasta padrão para iniciar a instalação do ns-3:
 ```
 cd workspace
 ```
@@ -83,13 +83,15 @@ Para habilitar Python como interpetrador do NS-3, favor configurar através do c
 ```
 /usr/bin/python3.6 ./waf configure
 ```
-## Projeto em C++
-### Construindo o Projeto
 
-Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3:
+## Projeto em C++
+
+Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3.
 ```
 NS3_HOME="/path/to/ns3/home"
 ```
+
+### Construindo o Projeto
 
 Construir o projeto através do código:
 ```
@@ -98,11 +100,6 @@ Construir o projeto através do código:
 
 ### Rodando a Simulação
 
-Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3.
-```
-NS3_HOME="/path/to/ns3/home"
-```
-
 Rodar o projeto através do código:
 ```
 ./run.sh first
@@ -110,11 +107,13 @@ Rodar o projeto através do código:
 Onde "first" é o nome do projeto compilado.
 
 ## Projeto em Python
-### Rodando a Simulação
+
 Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3.
 ```
 NS3_HOME="/path/to/ns3/home"
 ```
+
+### Rodando a Simulação
 
 Rodar o projeto através do código:
 ```
