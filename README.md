@@ -22,7 +22,7 @@ Setar a variável global **$NS3_HOME** com o path onde está instalado o ns-3.
 ### Como "Buildar"
 
 ```
-./build.sh  
+./build.sh
 ```
 
 ## Rodando a Simulação
