@@ -18,7 +18,7 @@ cd ns-3.31/
 
 ## Construindo o Projeto
 ### Pré-requisito
-Setar a variável global **$NS3_HOME**
+Setar a variável global **$NS3_HOME** com o path onde está instalado o ns-3.
 ### Como "Buildar"
 
 ```
@@ -27,7 +27,7 @@ Setar a variável global **$NS3_HOME**
 
 ## Rodando a Simulação
 ### Pré-requisito
-Setar a variável global **$NS3_HOME**
+Setar a variável global **$NS3_HOME** com o path onde está instalado o ns-3.
 ### Como "Rodar"
 ```
 ./run.sh first
