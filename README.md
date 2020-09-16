@@ -1,7 +1,7 @@
 # NS-3 Projeto de Aula
 
 ## Pré-requisitos
-Este tutorial foi executado em um Sistema Operacional Ubuntu, mas é compatível com windows através do (Cygwin)[https://www.cygwin.com/]
+Este tutorial foi executado em um Sistema Operacional Ubuntu, mas é compatível com windows através do [Cygwin](https://www.cygwin.com/)
 
 ## Instalação do NS-3
 
