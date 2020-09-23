@@ -95,14 +95,14 @@ NS3_HOME="/path/to/ns3/home"
 
 Construir o projeto através do código:
 ```
-./build.sh
+./ccbuild.sh
 ```
 
 ### Rodando a Simulação
 
 Rodar o projeto através do código:
 ```
-./run.sh first
+./ccrun.sh first
 ```
 Onde "first" é o nome do projeto compilado que contém a simulação.
 
