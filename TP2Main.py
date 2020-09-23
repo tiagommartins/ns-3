@@ -7,64 +7,111 @@ import ns.point_to_point
 import ns.csma
 import sys
 
-# sys.path.append(".")
-#from LoadBalancer import LoadBalancer
+def configureTrace():
+    ns.core.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
+    ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
+    pass
+
+def configureGatewayNodes():
+    clientNodes = ns.network.NodeContainer()
+    clientNodes.Create(2)
+    return clientNodes
+
+def configureGatewayDevices(gatewayNodes):
+    pointToPoint = ns.point_to_point.PointToPointHelper()
+    pointToPoint.SetDeviceAttribute("DataRate", ns.core.StringValue("100Mbps"))
+    pointToPoint.SetChannelAttribute("Delay", ns.core.StringValue("200ms"))
+    return pointToPoint.Install(gatewayNodes)
+
+def configureCSMANodes(gatewayNode, replicas):
+    csmaNodes = ns.network.NodeContainer()
+    csmaNodes.Add(gatewayNode)
+    csmaNodes.Create(replicas)
+    return csmaNodes
+
+def configureClientNodes(gatewayNode):
+    return configureCSMANodes(gatewayNode, 6)
+
+def configureServerNodes(gatewayNode):
+    return configureCSMANodes(gatewayNode, 3)
+
+def configureCSMADevices(csmaNodes):
+    csma = ns.csma.CsmaHelper()
+    csma.SetChannelAttribute("DataRate", ns.core.StringValue("1Gbps"))
+    csma.SetChannelAttribute("Delay", ns.core.TimeValue(ns.core.NanoSeconds(6560)))
+    return csma.Install(csmaNodes)
+
+def configureInternetStack(serverNodes, clientNode):
+    stack = ns.internet.InternetStackHelper()
+    stack.Install(serverNodes)
+    stack.Install(clientNode)
+    pass
+
+def configureAddress(address, devices, ipv4Address) :
+    address.SetBase(ns.network.Ipv4Address(ipv4Address), ns.network.Ipv4Mask("255.255.255.0"))
+    return address.Assign(devices)
+
+def configureAddressClient(address, clientDevices) :
+    return configureAddress(address, clientDevices, "10.1.1.0")
+
+def configureAddressServer(address, serverDevices) :
+    return configureAddress(address, serverDevices, "10.1.2.0")
+
+def configureAddressGateway(address, gatewayDevices) :
+    return configureAddress(address, gatewayDevices, "10.1.3.0")
+
+def configureServer(serverNode):
+    echoServer = ns.applications.UdpEchoServerHelper(9)
+    serverApps = echoServer.Install(serverNode)
+    serverApps.Start(ns.core.Seconds(1.0))
+    serverApps.Stop(ns.core.Seconds(11.0))
+    pass
+
+def configureClient(clientNode, serverTarget, interval):
+    echoClient = ns.applications.UdpEchoClientHelper(serverTarget, 9)
+    echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(10000))
+    echoClient.SetAttribute("Interval", ns.core.TimeValue(ns.core.Seconds(interval)))
+    echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
+    clientApps = echoClient.Install(clientNode)
+    clientApps.Start(ns.core.Seconds(2.0))
+    clientApps.Stop(ns.core.Seconds(10.0))
+    pass
 
 cmd = ns.core.CommandLine()
 cmd.Parse(sys.argv)
 
-#lb = LoadBalancer
-#print(lb)
+configureTrace()
 
-p2pNodes = ns.network.NodeContainer()
-p2pNodes.Create(2)
+gatewayNodes = configureGatewayNodes()
+gatewayDevices = configureGatewayDevices(gatewayNodes)
 
-pointToPoint = ns.point_to_point.PointToPointHelper()
-pointToPoint.SetDeviceAttribute("DataRate", ns.core.StringValue("1Gbps"))
-pointToPoint.SetChannelAttribute("Delay", ns.core.StringValue("200ms"))
+clientNodes = configureClientNodes(gatewayNodes.Get(0))
+clientDevices = configureCSMADevices(clientNodes)
 
-p2pDevices = pointToPoint.Install(p2pNodes)
+serverNodes = configureServerNodes(gatewayNodes.Get(1))
+serverDevices = configureCSMADevices(serverNodes)
 
-csmaNodes = ns.network.NodeContainer()
-csmaNodes.Add(p2pNodes.Get(1))
-csmaNodes.Create(3)
-
-csma = ns.csma.CsmaHelper()
-csma.SetChannelAttribute("DataRate", ns.core.StringValue("100Mbps"))
-csma.SetChannelAttribute("Delay", ns.core.TimeValue(ns.core.NanoSeconds(6560)))
-
-csmaDevices = csma.Install(csmaNodes)
-
-stack = ns.internet.InternetStackHelper()
-stack.Install(csmaNodes)
-stack.Install(p2pNodes.Get(0))
-
+configureInternetStack(serverNodes, clientNodes)
 
 address = ns.internet.Ipv4AddressHelper()
-address.SetBase(ns.network.Ipv4Address("10.1.1.0"), ns.network.Ipv4Mask("255.255.255.0"))
-p2pInterfaces = address.Assign(p2pDevices)
+configureAddressGateway(address, gatewayDevices)
+configureAddressClient(address, clientDevices)
+serverInterfaces = configureAddressServer(address, serverDevices)
 
-address.SetBase(ns.network.Ipv4Address("10.1.2.0"), ns.network.Ipv4Mask("255.255.255.0"))
-csmaInterfaces = address.Assign(csmaDevices)
+configureServer(serverNodes.Get(3))
+configureServer(serverNodes.Get(2))
+configureServer(serverNodes.Get(1))
 
-echoServer = ns.applications.UdpEchoServerHelper(9)
-
-serverApps = echoServer.Install(csmaNodes.Get(3))
-serverApps.Start(ns.core.Seconds(1.0))
-serverApps.Stop(ns.core.Seconds(10.0))
-
-echoClient = ns.applications.UdpEchoClientHelper(csmaInterfaces.GetAddress(3), 9)
-echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(1))
-echoClient.SetAttribute("Interval", ns.core.TimeValue(ns.core.Seconds (1.0)))
-echoClient.SetAttribute("PacketSize", ns.core.UintegerValue(1024))
-
-clientApps = echoClient.Install(p2pNodes.Get(0))
-clientApps.Start(ns.core.Seconds(2.0))
-clientApps.Stop(ns.core.Seconds(10.0))
+configureClient(clientNodes.Get(1), serverInterfaces.GetAddress(3), 0.33)
+configureClient(clientNodes.Get(2), serverInterfaces.GetAddress(2), 0.75)
+configureClient(clientNodes.Get(3), serverInterfaces.GetAddress(1), 0.90)
+configureClient(clientNodes.Get(4), serverInterfaces.GetAddress(3), 0.50)
+configureClient(clientNodes.Get(5), serverInterfaces.GetAddress(2), 0.65)
+configureClient(clientNodes.Get(6), serverInterfaces.GetAddress(1), 0.20)
 
 ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
-ns.core.Simulator.Stop(ns.core.Seconds(10.0))
+ns.core.Simulator.Stop(ns.core.Seconds(11.0))
 
 ns.core.Simulator.Run()
 ns.core.Simulator.Destroy()

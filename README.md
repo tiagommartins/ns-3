@@ -104,7 +104,7 @@ Rodar o projeto através do código:
 ```
 ./run.sh first
 ```
-Onde "first" é o nome do projeto compilado.
+Onde "first" é o nome do projeto compilado que contém a simulação.
 
 ## Projeto em Python
 
@@ -119,4 +119,10 @@ Rodar o projeto através do código:
 ```
 ./pyrun.sh first.py
 ```
-Onde "first" é o nome do projeto compilado.
+
+Para rodar o modo com visualizador segue o comando:
+```
+./pyrun-vis.sh first.py
+```
+
+Onde "first" é o nome do arquivo que contém a simulação.
