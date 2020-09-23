@@ -103,8 +103,6 @@ Para rodar com o modo de visualização segue o comando abaixo:
 ./pyrun-vis.sh TP2Main.py
 ```
 
-Onde "first" é o nome do arquivo que contém a simulação.
-
 ## Topologia de rede utilizado
 
 ![Topologia de rede](https://github.com/tiagommartins/ns-3/blob/master/images/TopologiaDeRedesTP2.png?raw=true)
