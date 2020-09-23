@@ -84,28 +84,6 @@ Para habilitar Python como interpetrador do NS-3, favor configurar através do c
 /usr/bin/python3.6 ./waf configure
 ```
 
-## Projeto em C++
-
-Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3.
-```
-NS3_HOME="/path/to/ns3/home"
-```
-
-### Construindo o Projeto
-
-Construir o projeto através do código:
-```
-./ccbuild.sh
-```
-
-### Rodando a Simulação
-
-Rodar o projeto através do código:
-```
-./ccrun.sh first
-```
-Onde "first" é o nome do projeto compilado que contém a simulação.
-
 ## Projeto em Python
 
 Caso você efetuou a instalação em outro diretório, é necessário setar a variável de ambiente **$NS3_HOME** com o path onde está instalado o ns-3.
@@ -117,12 +95,12 @@ NS3_HOME="/path/to/ns3/home"
 
 Rodar o projeto através do código:
 ```
-./pyrun.sh first.py
+./pyrun.sh TP2Main.py
 ```
 
-Para rodar o modo com visualizador segue o comando:
+Para rodar com o modo de visualização segue o comando abaixo:
 ```
-./pyrun-vis.sh first.py
+./pyrun-vis.sh TP2Main.py
 ```
 
 Onde "first" é o nome do arquivo que contém a simulação.
