@@ -15,9 +15,11 @@
 
 import ns.applications
 import ns.core
+import ns.visualizer
 import ns.internet
 import ns.network
 import ns.point_to_point
+import sys
 
 # // Default Network Topology
 # //
@@ -25,6 +27,9 @@ import ns.point_to_point
 # // n0 -------------- n1
 # //    point-to-point
 # //
+
+cmd = ns.core.CommandLine()
+cmd.Parse(sys.argv)
 
 ns.core.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
 ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
