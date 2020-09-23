@@ -126,3 +126,7 @@ Para rodar o modo com visualizador segue o comando:
 ```
 
 Onde "first" é o nome do arquivo que contém a simulação.
+
+## Topologia de rede utilizado
+
+![Topologia de rede](https://github.com/tiagommartins/ns-3/blob/master/images/TopologiaDeRedesTP2.png?raw=true)
