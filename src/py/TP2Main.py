@@ -60,14 +60,14 @@ def configureAddressServer(address, serverDevices) :
 def configureAddressGateway(address, gatewayDevices) :
     return configureAddress(address, gatewayDevices, "10.1.3.0")
 
-def configureServer(serverNode):
+def configureAppServer(serverNode):
     echoServer = ns.applications.UdpEchoServerHelper(9)
     serverApps = echoServer.Install(serverNode)
     serverApps.Start(ns.core.Seconds(1.0))
     serverApps.Stop(ns.core.Seconds(11.0))
     pass
 
-def configureClient(clientNode, serverTarget, interval):
+def configureAppClient(clientNode, serverTarget, interval):
     echoClient = ns.applications.UdpEchoClientHelper(serverTarget, 9)
     echoClient.SetAttribute("MaxPackets", ns.core.UintegerValue(10000))
     echoClient.SetAttribute("Interval", ns.core.TimeValue(ns.core.Seconds(interval)))
@@ -98,16 +98,16 @@ configureAddressGateway(address, gatewayDevices)
 configureAddressClient(address, clientDevices)
 serverInterfaces = configureAddressServer(address, serverDevices)
 
-configureServer(serverNodes.Get(3))
-configureServer(serverNodes.Get(2))
-configureServer(serverNodes.Get(1))
+configureAppServer(serverNodes.Get(1))
+configureAppServer(serverNodes.Get(2))
+configureAppServer(serverNodes.Get(3))
 
-configureClient(clientNodes.Get(1), serverInterfaces.GetAddress(3), 0.33)
-configureClient(clientNodes.Get(2), serverInterfaces.GetAddress(2), 0.75)
-configureClient(clientNodes.Get(3), serverInterfaces.GetAddress(1), 0.90)
-configureClient(clientNodes.Get(4), serverInterfaces.GetAddress(3), 0.50)
-configureClient(clientNodes.Get(5), serverInterfaces.GetAddress(2), 0.65)
-configureClient(clientNodes.Get(6), serverInterfaces.GetAddress(1), 0.20)
+configureAppClient(clientNodes.Get(1), serverInterfaces.GetAddress(3), 0.20)
+configureAppClient(clientNodes.Get(2), serverInterfaces.GetAddress(2), 0.33)
+configureAppClient(clientNodes.Get(3), serverInterfaces.GetAddress(1), 0.46)
+configureAppClient(clientNodes.Get(4), serverInterfaces.GetAddress(3), 0.59)
+configureAppClient(clientNodes.Get(5), serverInterfaces.GetAddress(2), 0.72)
+configureAppClient(clientNodes.Get(6), serverInterfaces.GetAddress(1), 0.85)
 
 ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
